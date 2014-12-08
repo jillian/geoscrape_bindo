@@ -1,6 +1,6 @@
 class ParentRequestId
 
-   def self.get_id
+  def get_id
     #dummy query to get parent_request_id
     category = 'active'
     city = 'Los_Angeles'
