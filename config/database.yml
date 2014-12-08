@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  database: geoscrape_yelp_development
+  database: geoscrape_yelp_development_2
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
