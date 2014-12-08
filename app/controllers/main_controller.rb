@@ -8,7 +8,7 @@ class MainController < ApplicationController
     categories = Category.all
     parent_request_id = ParentRequestId.get_id
 
-    # geo_grid.shuffle.each do |bound|
+    # geo_grid.each do |bound|
       sleep 10
       bound = [37.746964676, 122.453784943, 37.7876744001, 122.402629852]
       categories.each do |category|
