@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/current_tasks'
 
 
-  get '/scrape', to: 'scrape#run'
+  get '/scrape', to: 'main#scrape'
 
   resources :businesses, only: [ :index ] do 
     get :get_markers, on: :collection

@@ -1,6 +1,6 @@
 class Business < ActiveRecord::Base
 
-  has_one :category
+  belongs_to :categories
   has_one :location
 
 end

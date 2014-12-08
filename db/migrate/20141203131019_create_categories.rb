@@ -6,6 +6,7 @@ class CreateCategories < ActiveRecord::Migration
       t.string :color
       t.references :business, index: true
 
+
       t.timestamps
     end
   end

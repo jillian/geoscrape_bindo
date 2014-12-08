@@ -48,7 +48,7 @@ cat12 = Category.create!(
   color: '#FFF50E')
 cat13 = Category.create!(
   url_name: 'localservices',
-  difsplay_name: 'Local Services',
+  display_name: 'Local Services',
   color: '#D3D3D3')
 cat14 = Category.create!(
   url_name: 'massmedia',

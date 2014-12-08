@@ -23,9 +23,12 @@ ActiveRecord::Schema.define(version: 20141203131019) do
     t.string   "state"
     t.integer  "zipcode"
     t.string   "image"
+    t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "businesses", ["category_id"], name: "index_businesses_on_category_id", using: :btree
 
   create_table "categories", force: true do |t|
     t.string   "url_name"

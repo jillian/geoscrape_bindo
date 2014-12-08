@@ -7,6 +7,8 @@ class CreateBusinesses < ActiveRecord::Migration
       t.string :state
       t.integer :zipcode
       t.string :image
+      t.references :category, index: true
+
 
       t.timestamps
     end
