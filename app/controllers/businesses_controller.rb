@@ -3,7 +3,7 @@ class BusinessesController < ApplicationController
   respond_to :html, :json
 
   def index
-    @businesses = Business.all.includes(:location, :category).page(params[:page])
+    @businesses = Business.all.includes(:location, :category)
     # respond_with @businesses
   end
 
@@ -48,6 +48,11 @@ class BusinessesController < ApplicationController
 
     render json: geojson
 
+  end
+
+  def get_biz_img(img_url)  
+    img_urls = img_url.split('//')
+    "http://#{img_urls[1]}"
   end
 
  private

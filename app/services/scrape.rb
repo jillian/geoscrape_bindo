@@ -4,8 +4,8 @@ require "pry"
 require 'json'
 
 
-class InitialPageRequest
-  def self.grab_parent_request_id
+# class Scrape
+#   def self.get_parent_request_id
 
     #dummy query to get parent_request_id
     category = 'active'
@@ -28,45 +28,51 @@ class InitialPageRequest
       sleep 3.0 + rand
     end
     parent_request_id
-  end
+  # end
 
-  # CreateGrid.organize_workers(parent_request_id)
+# class Grid 
 
-  grid_array = []
-  original_grid_block = [33.818300.to_f, (-118.500300).to_f, 33.818800.to_f, (-118.499800).to_f]
-  grid_array << original_grid_block
-  #.0005 at 47 degrees latitude ~ 0.05 km
+#   def self.create
+    # .organize_workers(parent_request_id)
 
-  grid = original_grid_block
-  #this until loop creates columns within bounds
-  until grid[2] >= 34.159200.to_f
-    #builds a grid row
-    until grid[3] <= (-118.039200).to_f
-      block = []
-      block[0] = grid[0]
-      block[1] = grid[3].round(6)
-      block[2] = grid[2]
-      block[3] = (grid[3] - 0.000500.to_f).round(6)
-      grid_array << block
-      grid = block
-    end # end of row loop
-    grid[2] = (grid[2] + 0.000500).round(6)
-    grid[0] = (grid[0] + 0.000500).round(6)
-    grid[1] = original_grid_block[1]
-    grid[3] = original_grid_block[3]
-  end #end of column loop
+    grid_array = []
+    original_grid_block = [33.818300.to_f, (-118.500300).to_f, 33.818800.to_f, (-118.499800).to_f]
+    grid_array << original_grid_block
+    #.0005 at 47 degrees latitude ~ 0.05 km
 
-  puts "grid block - #{grid_array[0]}"
+    grid = original_grid_block
+    #this until loop creates columns within bounds
+    until grid[2] >= 34.159200.to_f
+      #builds a grid row
+      until grid[3] <= (-118.039200).to_f
+        block = []
+        block[0] = grid[0]
+        block[1] = grid[3].round(6)
+        block[2] = grid[2]
+        block[3] = (grid[3] - 0.000500.to_f).round(6)
+        grid_array << block
+        grid = block
+      end # end of row loop
+      grid[2] = (grid[2] + 0.000500).round(6)
+      grid[0] = (grid[0] + 0.000500).round(6)
+      grid[1] = original_grid_block[1]
+      grid[3] = original_grid_block[3]
+    end #end of column loop
 
-  ex_grid_array = [grid_array[0]]
-  ex_grid_array.each do |bound|
-    # Category_worker.perform_async(bound, parent_request_id)
-    categories = ['beautysvc']
-    categories.each do |category|
-      # Parse_Businesses_Worker.perform_async()
-      #bound = [sw_lat, sw_lng, ne_lat, ne_lng]
+    puts "grid block - #{grid_array[0]}"
+
+    ex_grid_array = [grid_array[0]]
+    ex_grid_array.each do |bound|
+      # Category_worker.perform_async(bound, parent_request_id)
+      categories = Category.all
+      categories.each do |category|
+        sleep 10
+        # Parse_Businesses_Worker.perform_async()
+        #bound = [sw_lat, sw_lng, ne_lat, ne_lng]
+
+
       puts "Bound #{bound}"
-      url = "http://www.yelp.com/search/snippet?find_desc=#{category}&find_loc=&l=g%3A#{bound[1]}%2C#{bound[0]}%2C#{bound[3]}%2C#{bound[2]}&parent_request_id=#{parent_request_id}&request_origin=user"
+      url = "http://www.yelp.com/search/snippet?find_desc=#{category.url_name}&find_loc=&l=g%3A#{bound[1]}%2C#{bound[0]}%2C#{bound[3]}%2C#{bound[2]}&parent_request_id=#{parent_request_id}&request_origin=user"
       puts "url #{url}"
       search_results = RestClient.get(url, :user_agent => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36" )
   
@@ -104,38 +110,39 @@ class InitialPageRequest
 
                 html_page.css('script').map(&:text)
 
-  #             # exists = Business.where(name: name, address: street_address)
-  #             # if exists.size <= 0
-  #             #   business = Business.create({
-  #             #     name: name,
-  #             #     address: street_address,
-  #             #     zipcode: zipcode,
-  #             #     city: city_name,
-  #             #     state: state,
-  #             #     image: image,
-  #             #     category: Category.find_by(url_name: category)
-  #             #   })
-              
+                exists = Business.where(name: name, address: street_address)
+                if exists.size <= 0
+                  business = Business.create({
+                    name: name,
+                    address: street_address,
+                    zipcode: zipcode,
+                    city: city_name,
+                    state: state,
+                    image: image,
+                    category: Category.find_by_url_name(category.url_name)
+                  })
+                
                 map_results = results["search_map"]["markers"]
                 loc = map_results[data_key.to_s] if map_results.has_key?(data_key.to_s)
                 puts "loc #{loc}"
 
+                if loc.present?
+                  business.location = Location.new(loc['location'])
+                  business.save
+                end
+
               end #address loop
             end #doc.css
-        
-  #               # if loc.present?
-  #               #   business.location = Location.new(loc['location'])
-  #               #   business.save
-  #               # end
-  #           #   end
-  #           end #doc loop
+
+              end
+            end #doc loop
           end #address loop
          #doc.css
         end #if search_results !nil
       end #categories
-    end #grid_array
-  end #grab
-end #class
+#     end #grid_array
+#   end #grab
+# end #class
 
 test = InitialPageRequest.new
 test.grab_ids

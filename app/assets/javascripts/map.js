@@ -27,13 +27,12 @@ $( document ).ready(function() {
     clusterGroup.clearLayers();
     for( var idx in geoJsonFeatures ) {
       var feature = geoJsonFeatures[idx];
-      var display_name = lazy_list[feature.properties.category]; 
       var marker = new L.marker(new L.LatLng(feature.geometry.coordinates[1],feature.geometry.coordinates[0]), {
             'icon': L.mapbox.marker.icon({'marker-size': feature.properties['marker-size'], 'marker-color': feature.properties['marker-color']})
           });
       var popupContent =  '<div id="' + feature.properties.id + '" class="popup">' +
                           '<h2>' + feature.properties.title + '</h2>' +
-                          '<h5>' + display_name + '</h5>' +
+                          '<h5>' + feature.properties.category + '</h5>' +
                           '<div class="details">' +
                           '<img src="' + feature.properties.image + '">' +
                           '<address>' + feature.properties.address + '</address>' + 

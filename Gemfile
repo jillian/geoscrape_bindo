@@ -32,7 +32,7 @@ gem 'sidekiq-failures'
 gem 'nokogiri' 
 gem 'rest_client', :require => 'rest-client'
 gem 'haml-rails'
-# gem 'skeleton-rails'
+gem 'skeleton-rails'
 gem 'pry'
 gem 'whenever', :require => false
 gem 'mechanize'

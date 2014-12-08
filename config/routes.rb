@@ -1,6 +1,8 @@
 require 'sidekiq/api'
 
 Rails.application.routes.draw do
+  get 'scrape/run'
+
   mount Sidekiq::Web => '/current_tasks'
 
 
