@@ -1,31 +1,16 @@
 require 'nokogiri'
 require 'json'
 
-class ParseBusinessesWorker
+class CategoryWorker
   include Sidekiq::Worker
 
-  # Los Angeles GEO-BOUNDARY BOX:
-  # nw - 34.1592° N, 118.5003° W
-  # se - 33.8183° N, 118.0392° W
-
-  # sw_lat, sw_lng = [33.818300, 118.500300]
-  # ne_lat, ne_lng = [34.159200, 118.0392]
-
-  def get_next_grid 
-    get
-
-  end
-  # after first iteration of parsing,
-  # sw_lat = sw_lat (until ne_lng < city_bounds)
-  # sw_lng = ne_lng
-  # ne_lat = ne_lat (until ne_lng < city_bounds )
-  # ne_lng = ne_lng + 0.0005 until ne_lng >= city_bounds
-
-
-  def perform(parent_request_id)
+  def perform(bound, parent_request_id)
     categories = Category.all
     categories.url_name.each do |category|
-      url = "http://www.yelp.com/search/snippet?find_desc=#{category}&find_loc=&l=g%3A#{sw_latitude}%2C#{sw_longitude}%2C#{ne_latitude}%2C#{ne_longitude}&parent_request_id=#{parent_request_id}&request_origin=user"
+      Parse_Businesses_Worker.perform_async()
+      #bound = [sw_lat, sw_lng, ne_lat, ne_lng]
+      url = "http://www.yelp.com/search/snippet?find_desc=#{category}&find_loc=&l=g%3A#{bound[0]}%2C#{bound[1]}%2C#{bound[2]}%2C#{bound[3]}&parent_request_id=#{parent_request_id}&request_origin=user"
+      puts "url #{url}"
       begin
         search_results = RestClient.get(url, :user_agent => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36" )
 
@@ -65,26 +50,26 @@ class ParseBusinessesWorker
               puts "city #{city_name}"
               category = category
 
-              exists = Business.where(name: name, address: street_address)
-              if exists.size <= 0
-                business = Business.create({
-                  name: name,
-                  address: street_address,
-                  zipcode: zipcode,
-                  city: city_name,
-                  state: state,
-                  image: image,
-                  category: Category.find_by(name: category)
-                })
+              # exists = Business.where(name: name, address: street_address)
+              # if exists.size <= 0
+              #   business = Business.create({
+              #     name: name,
+              #     address: street_address,
+              #     zipcode: zipcode,
+              #     city: city_name,
+              #     state: state,
+              #     image: image,
+              #     category: Category.find_by(name: category)
+              #   })
               
                 html_page.css('script').map(&:text)
                
                 map_results = results["search_map"]["markers"]
                 loc = map_results[data_key.to_s] if map_results.has_key?(data_key.to_s)
                 puts "loc #{loc}"
-                if loc.present?
-                  business.location = Location.new(loc['location'])
-                  business.save
+                # if loc.present?
+                #   business.location = Location.new(loc['location'])
+                #   business.save
                 end
               end
             end

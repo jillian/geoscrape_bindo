@@ -31,15 +31,21 @@ ActiveRecord::Schema.define(version: 20141203131019) do
     t.string   "url_name"
     t.string   "display_name"
     t.string   "color"
+    t.integer  "business_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "categories", ["business_id"], name: "index_categories_on_business_id", using: :btree
+
   create_table "locations", force: true do |t|
-    t.decimal  "latitude"
-    t.decimal  "longitude"
+    t.integer  "business_id"
+    t.float    "latitude"
+    t.float    "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "locations", ["business_id"], name: "index_locations_on_business_id", using: :btree
 
 end

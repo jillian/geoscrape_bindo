@@ -4,6 +4,7 @@ class CreateCategories < ActiveRecord::Migration
       t.string :url_name
       t.string :display_name
       t.string :color
+      t.references :business, index: true
 
       t.timestamps
     end

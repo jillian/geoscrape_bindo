@@ -1,5 +1,3 @@
-Category.delete_all
-
 cat1 = Category.create!(
   url_name: 'active',
   display_name: 'Active Life',
@@ -50,7 +48,7 @@ cat12 = Category.create!(
   color: '#FFF50E')
 cat13 = Category.create!(
   url_name: 'localservices',
-  di  splay_name: 'Local Services',
+  difsplay_name: 'Local Services',
   color: '#D3D3D3')
 cat14 = Category.create!(
   url_name: 'massmedia',
