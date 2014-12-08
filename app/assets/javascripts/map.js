@@ -5,7 +5,7 @@ $( document ).ready(function() {
 
   //Initialize map with base tileLayer (no data)
   var map = L.mapbox.map('map')
-    .setView([34.1014861,-118.4571974], 8)
+    .setView([34.1014861,-118.4571974], 6)
     .addLayer(L.mapbox.tileLayer('https://api.tiles.mapbox.com/v3/jmac8424.k6lb8hf1.json'));
 
   var geoJsonFeatures = [];
