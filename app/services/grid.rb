@@ -1,6 +1,6 @@
 class Grid
 
-# choose any grid size/location and parser should work
+# geographic area specified in /app/controllers/main_controller.rb
 # geo_area_bounds = { :sw_lat => 33.74, :sw_lng => 118.45, :ne_lat => 34.20, :ne_lng => 118.00 } 
 
   def build(geo_area_bounds)

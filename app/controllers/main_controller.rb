@@ -4,7 +4,8 @@ class MainController < ApplicationController
 
   def scrape
 
-    #customize these for another city/region/area
+    # Customize values below.
+    # Choose any grid size/location and parser should work
     geo_area_bounds = {
       sw_lat: 33.74, 
       sw_lng: 118.45, 
