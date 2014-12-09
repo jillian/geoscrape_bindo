@@ -6,6 +6,7 @@ class ParentRequestId
     city = 'Los_Angeles'
     neighborhood = 'Downtown'
     state = 'CA'
+    
     begin
       initial_page_request = RestClient.get("http://www.yelp.com/search?cflt=#{category}&l=p%3A#{state}%3A#{city}%3A%3A#{neighborhood}", "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36")
       # find main("\w*") and string parse for unique ID:

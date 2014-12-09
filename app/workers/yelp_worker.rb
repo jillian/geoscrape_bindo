@@ -59,7 +59,7 @@ class YelpWorker
                 name: name,
                 address: street_address,
                 zipcode: zipcode,
-                city: city_name,
+                city: city,
                 state: state,
                 image: image,
                 category_id: cat_found.id
