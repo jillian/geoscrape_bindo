@@ -10,7 +10,7 @@ RestClient.log =
   end
 
 class YelpWorker
-  # include Sidekiq::Worker
+  include Sidekiq::Worker
 
   def perform(bound, category, parent_request_id)
     url = "http://www.yelp.com/search/snippet?find_desc=#{category}&find_loc=&l=g%3A-#{bound[1]}%2C#{bound[0]}%2C-#{bound[3]}%2C#{bound[2]}&parent_request_id=#{parent_request_id}&request_origin=user"
@@ -19,7 +19,6 @@ class YelpWorker
     # begin
 
       results = JSON.parse(search_results)
-      puts "Results #{results[search_results]}"
       if !results["search_results"].include?('no-results')
 
         doc = Nokogiri::HTML(results["search_results"])
@@ -45,13 +44,13 @@ class YelpWorker
             end
             puts "zipcode = #{zipcode}"
 
-            # state = full_address.text.split(' ')[-2]
-            # puts "state #{state}"
+            state = full_address.text.split(' ')[-2]
+            puts "state #{state}"
 
-            # city_name = city.gsub("_", " ")
-            # puts "city #{city_name}"
-
-            # html_page.css('script').map(&:text)
+            if !full_address.css('br')[0].nil?
+              city = full_address.css('br')[0].next.text.strip.split(" ")[0..-3].join(" ").chomp(",")
+              puts "city #{city}"
+            end
 
             exists = Business.where(name: name, address: street_address)
             if exists.size <= 0
@@ -60,12 +59,13 @@ class YelpWorker
                 name: name,
                 address: street_address,
                 zipcode: zipcode,
-                # city: city_name,
-                # state: state,
+                city: city_name,
+                state: state,
                 image: image,
                 category_id: cat_found.id
               })
               business.save
+
               Rails.logger.error("Business: #{business}")
               puts "category=== #{category}"
               map_results = results["search_map"]["markers"]
@@ -75,19 +75,15 @@ class YelpWorker
               if loc.present?
                 business.location = Location.new(loc['location'])
                 business.save
-              end
-
-            end #address loop
-          end #doc.css
-
-        # end
-        # end #address loop
-
-      # rescue RestClient::ResourceNotFound => ex
-      #   puts "after first rescue #{ex}"
-      # rescue Exception => e
-      #   puts "after exception #{e}"
-      end
-    end
+              end #loc.present?
+            end # if exists.size <=0
+          end # full_address parsing
+        end # doc.css parsing
+      end # search_results parsing
+    # rescue RestClient::ResourceNotFound => ex
+    #   puts "after first rescue #{ex}"
+    # rescue Exception => e
+    #   puts "after exception #{e}"
+    # end
   end
 end

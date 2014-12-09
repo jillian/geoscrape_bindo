@@ -1,3 +1,5 @@
+require 'bigdecimal'
+
 class Grid
 
 # LA Grid --> 
@@ -7,41 +9,51 @@ class Grid
 # ne_longitude: -118.039200000
 
   def build
+    original_grid = [BigDecimal.new('33.746964676'), BigDecimal.new('118.453784943'), BigDecimal.new('33.7876744001'), BigDecimal.new('118.402629852')]
     grid_array = []
-    original_grid_block = [33.818300.to_f, 118.500300.to_f, 33.833800.to_f, 118.499800.to_f]
-    grid_array << original_grid_block
-    
+    first_block = [33.74, 118.45, 33.78, 118.40]
 
-   
-    grid = original_grid_block
-    until grid[2] >= 34.146964676.to_f
-      until grid[3] <= 118.039200000.to_f
-        block = []
-        block[0] = grid[0]
-        block[1] = grid[3].round(6)
-        block[2] = grid[2]
-        block[3] = (grid[3] - 0.020000.to_f).round(9)
-        grid_array << block
-        grid = block
+    grid = first_block
+    until grid[3] < 118.00
+      row_block = []
+      row_block[0] = original_grid[0].to_f
+      row_block[1] = grid[3]
+      row_block[2] = original_grid[2].to_f
+      row_block[3] = grid[3] - 0.05
+      row_block.map do |x|
+        x.to_f
       end
-      grid[0] = grid[2]
-      grid[2] = (grid[2] + 0.020000).round(9)
-      grid[1] = original_grid_block[1]
-      grid[3] = original_grid_block[3]
+      grid = row_block
+      grid_array << row_block 
     end
-  grid_array
+    # puts "row count - #{grid_array.count}"
+    # puts "ROW ARRAY ==> "
+    # puts "#{grid_array}"
+
+    # build columns on top of arrays
+
+    grid_array_2 = [grid_array[0], grid_array[1], grid_array[2], grid_array[3], grid_array[4], grid_array[5], grid_array[6],grid_array[7], grid_array[8]]
+    grid_array_2.each do |x|
+      grid = x
+      until grid[2] > 34.20
+        column_block = []
+        column_block[0] = grid[2]
+        column_block[1] = grid[1]
+        column_block[2] = grid[2] + 0.05
+        column_block[3] = grid[3]
+        # column_block.map do |x|
+        #   x.to_f
+        # end
+        grid = column_block
+        grid_array << column_block
+      end
+    end
+    # puts "*****************"
+    # puts "******************"
+    # puts "final grid array #{grid_array}"
+    # puts "final count - #{grid_array.count}"
+    # grid_array
   end
+
+
 end
-
-
-# san fran grid block
-# -122.453784943 difference: .051155091
-# -122.402629852
-#  37.746964676  difference: .0407097241 distance between: 2.814 mi, 4.528km
-#  37.7876744001  .02 diff => 1.432 mi, 2.304 km
-
-# LA grid block
-# -118.453784943
-# -118.402629852
-# 33.746964676
-# 33.7876744001 
