@@ -25,3 +25,11 @@ class Grid
   grid_array
   end
 end
+
+#http://www.yelp.com/search/snippet?find_desc=publicservicesgovt&find_loc=&l=g%3A
+
+# san fran grid
+# -122.453784943 difference: .051155091
+# -122.402629852
+#  37.746964676  difference: .0407097241
+#  37.7876744001

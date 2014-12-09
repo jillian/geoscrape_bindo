@@ -11,7 +11,7 @@ class MainController < ApplicationController
 
     # geo_grid.each do |bound|
       sleep 10
-      bound = [37.746964676, 122.453784943, 37.7876744001, 122.402629852]
+      bound = [33.746964676, 118.453784943, 33.7876744001, 118.402629852]
       categories.each do |category|
         sleep 10
         crawler = YelpWorker.new
