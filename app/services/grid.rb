@@ -13,17 +13,17 @@ class Grid
     grid_array = []
     first_block = [33.74, 118.45, 33.78, 118.40]
 
-    grid = first_block
-    until grid[3] < 118.00
+    grid_1 = first_block
+    until grid_1[3] < 118.00
       row_block = []
       row_block[0] = original_grid[0].to_f
-      row_block[1] = grid[3]
+      row_block[1] = grid_1[3]
       row_block[2] = original_grid[2].to_f
-      row_block[3] = grid[3] - 0.05
+      row_block[3] = grid_1[3] - 0.05
       row_block.map do |x|
         x.to_f
       end
-      grid = row_block
+      grid_1 = row_block
       grid_array << row_block 
     end
     # puts "row count - #{grid_array.count}"
@@ -34,17 +34,17 @@ class Grid
 
     grid_array_2 = [grid_array[0], grid_array[1], grid_array[2], grid_array[3], grid_array[4], grid_array[5], grid_array[6],grid_array[7], grid_array[8]]
     grid_array_2.each do |x|
-      grid = x
-      until grid[2] > 34.20
+      grid_2 = x
+      until grid_2[2] > 34.20
         column_block = []
-        column_block[0] = grid[2]
-        column_block[1] = grid[1]
-        column_block[2] = grid[2] + 0.05
-        column_block[3] = grid[3]
+        column_block[0] = grid_2[2]
+        column_block[1] = grid_2[1]
+        column_block[2] = grid_2[2] + 0.05
+        column_block[3] = grid_2[3]
         # column_block.map do |x|
         #   x.to_f
         # end
-        grid = column_block
+        grid_2 = column_block
         grid_array << column_block
       end
     end
