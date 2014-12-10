@@ -20,9 +20,9 @@ class MainController < ApplicationController
     request_id = pr_id.get_id
 
     geo_grid.each do |bound|
-      sleep 10
+      sleep 2
       categories.each do |category|
-        sleep 10
+        sleep 3
         crawler = YelpWorker.perform_async(bound, category.url_name, request_id)
       end
     end
